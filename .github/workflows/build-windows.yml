@@ -1,0 +1,19 @@
+name: Сборка под Windows
+
+on:
+  workflow_dispatch:            # запуск вручную кнопкой на GitHub
+
+jobs:
+  build:
+    runs-on: windows-latest     # виртуальная машина с Windows
+    steps:
+      - uses: actions/checkout@v4          # скачать код репозитория
+      - uses: actions/setup-python@v5      # поставить Python
+        with:
+          python-version: "3.14"
+      - run: pip install -r requirements.txt pyinstaller pillow
+      - run: pyinstaller --windowed --name FindTheSame --icon assets/icon_windows.png main.py
+      - uses: actions/upload-artifact@v4   # сохранить результат для скачивания
+        with:
+          name: FindTheSame-windows
+          path: dist/FindTheSame/
